@@ -1,0 +1,61 @@
+/* /Users/markygoldstein/Documents/Salesforce/lightningWebCmpSpecialist/force-app/main/default/lwc/boatTile/boatTile.css */
+.tile {
+  /* width: 100%; /* Removed as layout item handles width */
+  height: 180px; /* Adjusted height slightly */
+  padding: var(--lwc-borderWidthThin, 1px) !important; /* Use SLDS token */
+  background-position: center;
+  background-size: cover;
+  border-radius: 5px; /* Consistent radius */
+}
+
+.selected {
+  border: 3px solid #005fb2; /* Using hex for the blue color */
+  border-radius: 5px; /* Consistent radius */
+}
+
+.tile-wrapper {
+  cursor: pointer;
+  padding: 5px;
+  display: block; /* Ensure it behaves like a block */
+  position: relative; /* Needed for absolute positioning of lower-third */
+  border-radius: 5px; /* Consistent radius */
+  background-color: var(--lwc-colorGray1, var(--lwc-colorGray2, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeaderContrastInverse, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-brandHeaderContrastInverse, var(--lwc-paletteNeutral100, white))))))))))))); /* Add a background for contrast */
+  box-shadow: var(--lwc-spacingNone, 0) var(--lwc-borderWidthThin, 1px) 3px rgba(0,0,0,0.12), var(--lwc-spacingNone, 0) var(--lwc-borderWidthThin, 1px) var(--lwc-borderWidthThick, 2px) rgba(0,0,0,0.24); /* Optional subtle shadow */
+  transition: box-shadow .3s ease-in-out; /* Smooth transition for hover (optional) */
+}
+
+.tile-wrapper:hover {
+   box-shadow: var(--lwc-spacingNone, 0) 3px 6px rgba(0,0,0,0.16), var(--lwc-spacingNone, 0) 3px 6px rgba(0,0,0,0.23); /* Optional hover effect */
+}
+
+.lower-third {
+   /* Position relative to tile-wrapper */
+  bottom: 5px; /* Align to bottom inside the padding */
+  left: 5px;  /* Align to left inside the padding */
+  right: 5px; /* Align to right inside the padding */
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  color: var(--lwc-brandHeader, var(--lwc-brandHeaderContrastInverse, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-colorGray1, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-colorGray2, var(--lwc-brandHeader, var(--lwc-paletteNeutral100, white))))))))))))));
+  padding: var(--lwc-varSpacingXSmall, var(--lwc-spacingXSmall, 8px)); /* Padding inside the lower third */
+  border-bottom-left-radius: 3px; /* Match wrapper radius slightly */
+  border-bottom-right-radius: 3px;
+}
+
+/* Ensure text inside lower-third is readable */
+.lower-third h1,
+.lower-third h2,
+.lower-third div {
+  color: var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-brandHeaderContrastInverse, var(--lwc-colorGray2, var(--lwc-colorGray1, var(--lwc-brandHeader, var(--lwc-brandHeader, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, var(--lwc-colorGray2, var(--lwc-paletteNeutral100, var(--lwc-paletteNeutral100, white)))))))))))))));
+  margin-bottom: var(--lwc-varSpacingXxxSmall, 2px); /* Add small spacing between lines */
+}
+
+.lower-third h1 {
+  font-size: 1.1rem; /* Adjust size if needed */
+}
+
+.lower-third h2 {
+  font-size: 0.9rem; /* Adjust size if needed */
+}
+
+.lower-third .slds-text-body_small {
+  font-size: 0.8rem; /* Adjust size if needed */
+}

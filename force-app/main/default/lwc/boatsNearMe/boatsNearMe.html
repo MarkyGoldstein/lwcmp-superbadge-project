@@ -1,0 +1,39 @@
+<!-- boatsNearMe.html -->
+<template>
+
+    <lightning-card class="slds-is-relative" title="Boats Near Me" icon-name="standard:location">
+       <!-- Loading Spinner -->
+       <template if:true={isLoading}>
+          <lightning-spinner alternative-text="Loading" variant="brand" size="large"></lightning-spinner>
+       </template>
+  
+       <!-- Map -->
+       <!-- Render map only when not loading and markers are available (or user location is known) -->
+       <template if:false={isLoading}>
+           <template if:true={mapMarkers.length}>
+               <div class="slds-m-around_medium">
+                   <lightning-map
+                       map-markers={mapMarkers}
+                       zoom-level="12" 
+                       markers-title="Nearby Boats">
+                   </lightning-map>
+               </div>
+           </template>
+           <template if:false={mapMarkers.length}>
+               <!-- Show message if no markers (e.g., location error or no boats found) -->
+               <div class="slds-align_absolute-center slds-p-around_medium">
+                   <template if:true={error}>
+                       Could not load nearby boats. Please ensure location services are enabled and try refreshing.
+                   </template>
+                   <template if:false={error}>
+                       No boats found near your location for the selected type, or location is unavailable.
+                   </template>
+               </div>
+           </template>
+       </template>
+  
+       <!-- Footer -->
+       <div slot="footer">Top 10 Only!</div>
+    </lightning-card>
+  </template>
+  

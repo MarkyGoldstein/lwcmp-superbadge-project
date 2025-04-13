@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Boat Map</masterLabel> <!-- Added a user-friendly label -->
+    <description>Component to display a map for boats.</description> <!-- Optional: Good practice -->
+    <targets>
+        <target>lightning__AppPage</target>
+        <!-- Add other targets like lightning__RecordPage or lightning__HomePage if needed later -->
+    </targets>
+</LightningComponentBundle>

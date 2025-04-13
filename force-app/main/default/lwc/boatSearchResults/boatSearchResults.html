@@ -1,0 +1,41 @@
+<!-- boatSearchResults.html -->
+<template>
+    <lightning-tabset variant="scoped">
+        <!-- Existing Tab for Boat Tiles -->
+        <lightning-tab label="Boat Search Results">
+            <!-- Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="small" variant="brand"></lightning-spinner>
+            </template>
+
+            <!-- Boat Tiles -->
+            <lightning-layout multiple-rows horizontal-align="center">
+                <template if:false={boats.length}>
+                     <!-- layout horizontally aligned center -->
+                     <div class="slds-align_absolute-center">No boats found</div>
+                </template>
+                <!-- Iterate boat list -->
+                <template for:each={boats} for:item="boat">
+                    <lightning-layout-item key={boat.Id} padding="around-small" size="12" small-device-size="6" medium-device-size="4" large-device-size="3">
+                        <!-- Each tile calls updateSelectedTile -->
+                        <c-boat-tile boat={boat} selected-boat-id={selectedBoatId} onboatselect={updateSelectedTile}></c-boat-tile>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </lightning-tab>
+
+        <!-- New Tab for Boats Near Me -->
+        <lightning-tab label="Boats Near Me">
+            <!-- Instantiate boatsNearMe component -->
+            <c-boats-near-me boat-type-id={boatTypeId}></c-boats-near-me> <!-- Pass boatTypeId -->
+        </lightning-tab>
+
+        <!-- Optional: Add other tabs if needed -->
+
+    </lightning-tabset>
+
+    <!-- Optional: Placeholder for message when no boats are found -->
+    <!-- <div class="slds-align_absolute-center">
+        {noBoatsFoundMessage}
+    </div> -->
+</template>
