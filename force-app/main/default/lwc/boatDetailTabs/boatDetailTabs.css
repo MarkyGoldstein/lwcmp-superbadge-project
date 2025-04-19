@@ -1,0 +1,5 @@
+/* boatDetailTabs.css */
+.no-boat-height {
+    height: 3rem; /* Sets a fixed height for the placeholder message container */
+    line-height: 3rem; /* Vertically centers the text within the height */
+  }

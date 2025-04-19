@@ -2,12 +2,10 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>63.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>Boat Search Results</masterLabel> <!-- Added a user-friendly label -->
-    <description>Component to list search results for boats.</description> <!-- Optional: Good practice -->
     <targets>
-        <target>lightning__AppPage</target>
+        <!-- Add targets where this component can be used -->
         <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
         <target>lightning__HomePage</target>
-        <!-- Add other targets as needed -->
     </targets>
 </LightningComponentBundle>

@@ -67,26 +67,25 @@ public with sharing class BoatDataService {
         return [SELECT Name, Id FROM BoatType__c WITH SECURITY_ENFORCED ORDER BY Name];
     }
 
-    @AuraEnabled
+    @AuraEnabled(cacheable=false) // Crucial: Disable caching
     public static List<BoatReview__c> getAllReviews(Id boatId) {
+        if (boatId == null) {
+            return new List<BoatReview__c>(); // Return empty list if no boatId
+        }
         return [
             SELECT
                 Id,
-                Name,
+                Name, // Review Subject
                 Comment__c,
                 Rating__c,
-                LastModifiedDate,
                 CreatedDate,
+                CreatedBy.Id,
                 CreatedBy.Name,
                 CreatedBy.SmallPhotoUrl,
                 CreatedBy.CompanyName
-            FROM
-                BoatReview__c
-            WHERE
-                Boat__c =:boatId
-            WITH SECURITY_ENFORCED
-            ORDER BY
-                CreatedDate DESC
+            FROM BoatReview__c
+            WHERE Boat__c = :boatId
+            ORDER BY CreatedDate DESC
         ];
     }
 
@@ -111,5 +110,8 @@ public with sharing class BoatDataService {
         
         update boatsForUpdate;
         return 'Success: Boats updated successfully';
+    
     }
 }
+
+

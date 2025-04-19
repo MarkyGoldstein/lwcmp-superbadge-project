@@ -1,0 +1,63 @@
+<template>
+    <!-- Show message if no boat is selected (wiredRecord has no data yet) -->
+    <template if:false={wiredRecord.data}>
+        <lightning-card>
+            <span class="slds-align_absolute-center no-boat-height">
+                {label.labelPleaseSelectABoat}
+            </span>
+        </lightning-card>
+    </template>
+
+    <!-- Show tabs if a boat is selected (wiredRecord has data) -->
+    <template if:true={wiredRecord.data}>
+        <lightning-tabset variant="scoped">
+
+            <!-- Details Tab -->
+            <lightning-tab label={label.labelDetails} value="details" icon-name={detailsTabIconName}>
+                <lightning-card title={boatName} icon-name={detailsTabIconName}>
+                    <!-- Button in the actions slot -->
+                    <lightning-button
+                        label={label.labelFullDetails}
+                        slot="actions"
+                        onclick={navigateToRecordViewPage}>
+                    </lightning-button>
+
+                    <!-- Boat Details using record-view-form -->
+                    <lightning-record-view-form
+                        record-id={boatId}
+                        object-api-name="Boat__c"
+                        density="compact">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-var-p-horizontal_small">
+                                <lightning-output-field field-name={boatFields.boatType}></lightning-output-field>
+                                <lightning-output-field field-name={boatFields.boatLength}></lightning-output-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-var-p-horizontal_small">
+                                <lightning-output-field field-name={boatFields.boatPrice}></lightning-output-field>
+                                <lightning-output-field field-name={boatFields.boatDescription}></lightning-output-field>
+                            </div>
+                        </div>
+                    </lightning-record-view-form>
+                </lightning-card>
+            </lightning-tab>
+
+            <!-- Reviews Tab -->
+            <lightning-tab label={label.labelReviews} value="reviews">
+                <!-- Instantiate boatReviews component, passing the boatId -->
+                <!-- Ensure c-boat-reviews component exists and accepts boatId -->
+                <c-boat-reviews record-id={boatId}></c-boat-reviews>
+            </lightning-tab>
+
+            <!-- Add Review Tab -->
+            <lightning-tab label={label.labelAddReview} value="addReview">
+                <!-- Instantiate boatAddReviewForm component, passing boatId -->
+                <!-- Ensure c-boat-add-review-form exists, accepts boatId, and fires 'createreview' -->
+                <c-boat-add-review-form
+                    record-id={boatId}
+                    oncreatereview={handleReviewCreated}>
+                </c-boat-add-review-form>
+            </lightning-tab>
+
+        </lightning-tabset>
+    </template>
+</template>

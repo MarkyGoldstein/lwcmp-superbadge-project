@@ -9,74 +9,91 @@ const LONGITUDE_FIELD = 'Boat__c.Geolocation__Longitude__s';
 const LATITUDE_FIELD = 'Boat__c.Geolocation__Latitude__s';
 const BOAT_FIELDS = [LONGITUDE_FIELD, LATITUDE_FIELD];
 
-export default class BoatMap extends LightningElement {
-  // Private
-  subscription = null;
-  @track boatId; // Use @track to make it reactive for the template if needed, though getRecord handles reactivity
 
-  // Public properties exposed in Lightning App Builder
+export default class BoatMap extends LightningElement {
+
+  // Private properties
+  subscription = null;
+  @track boatId; // Use @track for reactivity if needed elsewhere, though @wire handles its own reactivity
+  @track mapMarkers = [];
+
+  // Public property to receive recordId (optional, but good practice if used elsewhere)
   @api get recordId() {
     return this.boatId;
   }
   set recordId(value) {
-    this.setAttribute('boatId', value); // Standard practice for reflecting API property to attribute
+    // Setting the attribute ensures it reflects in the DOM if needed
+    this.setAttribute('boatId', value);
     this.boatId = value;
   }
 
-  // Controls the map marker visibility
-  error = undefined;
+  // Property to hold map markers
   @track mapMarkers = [];
+  error = undefined; // To store potential wire errors
 
-  // Provides boat data via wire service
+  // Wire MessageContext for using Message Service functions
+  @wire(MessageContext)
+  messageContext;
+
+  // Wire the getRecord adapter to fetch boat data based on boatId
   @wire(getRecord, { recordId: '$boatId', fields: BOAT_FIELDS })
   wiredRecord({ error, data }) {
-    // Error handling
     if (data) {
       this.error = undefined;
       const longitude = getFieldValue(data, LONGITUDE_FIELD);
       const latitude = getFieldValue(data, LATITUDE_FIELD);
-      this.updateMap(longitude, latitude);
+      // Ensure coordinates are valid before updating map
+      if (longitude && latitude) {
+          this.updateMap(longitude, latitude);
+      } else {
+          // Handle case where geolocation fields might be null
+          this.mapMarkers = [];
+          console.warn(`Geolocation data missing for boat ${this.boatId}`);
+      }
     } else if (error) {
       this.error = error;
-      this.boatId = undefined;
-      this.mapMarkers = [];
+      this.boatId = undefined; // Clear boatId on error
+      this.mapMarkers = []; // Clear markers on error
+      console.error('Error fetching boat record:', JSON.stringify(error));
     }
   }
 
-  // Wire MessageContext for Message Service
-  @wire(MessageContext)
-  messageContext;
-
-  // Subscribes to the message channel
-  subscribeMC() {
-    // local boatId must receive the recordId from the message
-    if (this.subscription || this.recordId) { // Check if already subscribed or if recordId is set directly
-        return;
-    }
-    // Subscribe to the message channel to listen for boat selection events
-    this.subscription = subscribe(
-        this.messageContext,
-        BOATMC,
-        (message) => { this.boatId = message.recordId }, // Update boatId when a message is received
-        { scope: APPLICATION_SCOPE } // Listen for messages published from anywhere in the application
-    );
-  }
-
-  // Runs when component is connected, subscribes to BoatMC
+  // Standard lifecycle hook, called when component is inserted into the DOM
   connectedCallback() {
     this.subscribeMC();
   }
 
-  // Creates the map markers array with the single boat location.
-  updateMap(longitude, latitude) {
-    this.mapMarkers = [{
-        location: { Latitude: latitude, Longitude: longitude },
-        title: 'Selected Boat Location', // Or potentially fetch the boat name if needed
-        description: `Coords: ${latitude}, ${longitude}`
-    }];
+  // Encapsulates logic for subscribing to the message channel
+  subscribeMC() {
+    // Check if component is already subscribed or if boatId is already set directly
+    if (this.subscription || this.boatId) {
+      return;
+    }
+    // Subscribe to the BOATMC message channel
+    this.subscription = subscribe(
+      this.messageContext,
+      BOATMC,
+      (message) => {
+        // When a message is received, update the boatId
+        this.boatId = message.recordId;
+      },
+      // Listen for messages published from anywhere in the application
+      { scope: APPLICATION_SCOPE }
+    );
   }
 
-  // Getter method for displaying the map component, or a helper method.
+  // Creates the map marker array with the boat's location
+  updateMap(longitude, latitude) {
+    this.mapMarkers = [
+      {
+        location: { Latitude: latitude, Longitude: longitude },
+        title: 'Selected Boat Location', // Simple title for the marker
+        description: `Coords: ${latitude}, ${longitude}` // Optional description
+      }
+    ];
+  }
+
+  // Getter to determine if the map should be shown (optional, but can simplify template)
   get showMap() {
     return this.mapMarkers.length > 0;
   }

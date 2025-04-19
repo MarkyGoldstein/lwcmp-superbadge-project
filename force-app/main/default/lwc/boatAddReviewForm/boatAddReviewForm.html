@@ -1,0 +1,64 @@
+<template>
+    <lightning-record-edit-form
+        object-api-name={boatReviewObject}
+        onsubmit={handleSubmit}
+        onsuccess={handleSuccess}
+        onerror={handleError}> <!-- Added error handler -->
+
+        <!-- Message to display LDS errors -->
+        <lightning-messages></lightning-messages>
+
+        <lightning-layout multiple-rows vertical-align="start">
+            <!-- Review Subject -->
+            <lightning-layout-item size="12" padding="horizontal-small">
+                <div class="slds-form-element slds-var-m-bottom_small">
+                    <!-- Use label element for accessibility -->
+                    <label class="slds-form-element__label" for="review-subject">{labelSubject}</label>
+                    <div class="slds-form-element__control">
+                        <!-- Bind to Name field, hide default label, make required -->
+                        <lightning-input-field
+                            id="review-subject"
+                            field-name={nameField}
+                            variant="label-hidden"
+                            required>
+                        </lightning-input-field>
+                    </div>
+                </div>
+            </lightning-layout-item>
+
+            <!-- Rating -->
+            <lightning-layout-item size="12" padding="horizontal-small">
+                <div class="slds-form-element slds-var-m-bottom_small">
+                    <label class="slds-form-element__label" for="rating-component">{labelRating}</label>
+                    <div class="slds-form-element__control" id="rating-component">
+                        <!-- Instantiate five star rating component -->
+                        <!-- Listen for ratingchange event -->
+                        <c-five-star-rating onratingchange={handleRatingChanged}></c-five-star-rating>
+                        <!-- Note: Required validation is handled in handleSubmit -->
+                    </div>
+                </div>
+            </lightning-layout-item>
+
+            <!-- Comment -->
+            <lightning-layout-item size="12" padding="horizontal-small">
+                 <!-- Bind to Comment field, label inherited, make required -->
+                 <!-- slds-var-m-bottom_small added for spacing -->
+                <lightning-input-field
+                    class="slds-var-m-bottom_small"
+                    field-name={commentField}
+                    required>
+                </lightning-input-field>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Submit Button -->
+        <div class="slds-align_absolute-center" style="margin-top: 15px;"> <!-- Increased margin-top -->
+            <lightning-button
+                label="Submit"
+                type="submit"
+                variant="brand"
+                icon-name="utility:save">
+            </lightning-button>
+        </div>
+    </lightning-record-edit-form>
+</template>
